@@ -1,6 +1,16 @@
 module.exports = function(builder)
 {
+    var root = __dirname + "/.."
     return {
+        "main": {
+            "callable": root + "/main.js",
+            "arguments": [
+                "@test.expect",
+                "@test.double",
+                "@test.metrics",
+                "@test.builder"
+            ]
+        },
         "marky": {
             "object": "marky"
         },
@@ -12,6 +22,19 @@ module.exports = function(builder)
         },
         "testdouble.chai": {
             "object": "testdouble-chai"
+        },
+        "test.double": {
+            "resolve": [
+                "@test.calledWith",
+                "@test.match"
+            ],
+            "service": function(calledWith)
+            {
+                return {
+                    calledWith: calledWith,
+                    match: match
+                };
+            }
         },
         "test.match": {
             "resolve": [
@@ -34,14 +57,6 @@ module.exports = function(builder)
                 chai.use(
                     function(chai, utils)
                     {
-                        utils.addProperty(
-                            chai.Assertion.prototype,
-                            "times",
-                            function()
-                            {
-                                console.log("boo"); 
-                            }
-                        );
                         utils.addMethod(
                             chai.Assertion.prototype,
                             "calledTimes",
@@ -130,12 +145,12 @@ module.exports = function(builder)
                             }
                         );
                         const avg = (total / this._results.length);
-                        const str = `      ${yellow}\u21E5${end} (total: ${total.toPrecision(3) }ms avg: ${avg.toPrecision(3)}ms)`;
+                        const str = "      " + yellow + "\u21E5" + end + " (total: " + total.toPrecision(3) + "ms avg: " + avg.toPrecision(3) + "ms)";
                         console.log(str);
                     },
                     report: function(result)
                     {
-                        const str = `      ${yellow}\u21E5${end} (!${result.startTime.toPrecision(3)}ms > ${result.duration.toPrecision(3)}ms)`;
+                        const str = "      " + yellow + "\u21E5" + end + " (!" + result.startTime.toPrecision(3) + "ms > " + result.duration.toPrecision(3) + "ms)";
                         console.log(str);
                     },
                     stop: function(title)
