@@ -2,7 +2,8 @@
 !/docker-compose.yml
 !/index.js
 !/conf/**
-!bin/**
+!/bin/**
+!/*.js
 !package.json
 !README.md
 !LICENSE
